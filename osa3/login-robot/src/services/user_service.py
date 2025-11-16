@@ -38,3 +38,22 @@ class UserService:
             raise UserInputError("Username and password are required")
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
+                # käyttäjänimen pituus vähintään 3
+        if len(username) < 3:
+            raise UserInputError("Username must be at least 3 characters long")
+
+        # käyttäjänimi vain a–z ja pienillä kirjaimilla
+        if not username.isalpha() or not username.islower():
+            raise UserInputError("Username must contain only lowercase letters")
+
+        # käyttäjänimi ei saa olla jo käytössä
+        if self._user_repository.find_by_username(username):
+            raise UserInputError("Username already exists")
+
+        # salasanan pituus vähintään 8
+        if len(password) < 8:
+            raise UserInputError("Password must be at least 8 characters long")
+
+        # salasana ei saa olla pelkkiä kirjaimia
+        if password.isalpha():
+            raise UserInputError("Password must contain at least one non-letter character")
